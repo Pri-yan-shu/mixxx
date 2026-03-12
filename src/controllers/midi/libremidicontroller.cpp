@@ -84,7 +84,7 @@ int LibremidiController::open(const QString& resourcePath) {
     }
     if (m_pOutputPort && isOutputDevice()) {
         qCInfo(m_logBase) << "LibremidiController: Opening"
-                          << m_pOutputPort->port_name << "for output";
+                          << m_pOutputPort->port_name.c_str() << "for output";
 
         stdx::error error = m_pOutputDevice->open_port(m_pOutputPort.value());
         if (error.is_set()) {

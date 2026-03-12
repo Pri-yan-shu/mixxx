@@ -205,7 +205,7 @@ QList<Controller*> LibremidiEnumerator::queryDevices() {
     int inputDevIndex = -1;
     int outputDevIndex = -1;
 
-    QMap<int, QString> unassignedOutputDevices;
+    QMap<size_t, QString> unassignedOutputDevices;
 
     // Build a complete list of output devices for later pairing
     for (size_t i = 0; i < out_ports.size(); i++) {
@@ -239,7 +239,7 @@ QList<Controller*> LibremidiEnumerator::queryDevices() {
         outputDevIndex = -1;
 
         // Search for a corresponding output device
-        QMapIterator<int, QString> j(unassignedOutputDevices);
+        QMapIterator<size_t, QString> j(unassignedOutputDevices);
         while (j.hasNext()) {
             j.next();
 
