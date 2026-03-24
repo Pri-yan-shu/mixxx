@@ -11,6 +11,7 @@
 #include "engine/sidechain/enginenetworkstream.h"
 #include "preferences/usersettings.h"
 #include "soundio/sounddevice.h"
+#include "soundio/sounddeviceenumerator.h"
 #include "soundio/soundmanagerconfig.h"
 #include "util/cmdlineargs.h"
 #include "util/types.h"
@@ -49,7 +50,10 @@ class SoundManager : public QObject {
     // Creates a list of sound devices
     void clearAndQueryDevices();
     void queryDevices();
+
+    /// Moved to PortAudioEnumerator
     void queryDevicesPortaudio();
+
     void queryDevicesMixxx();
 
     // Opens all the devices chosen by the user in the preferences dialog, and
@@ -123,6 +127,12 @@ class SoundManager : public QObject {
     void outputRegistered(const AudioOutput& output, AudioSource* src);
     void inputRegistered(const AudioInput& input, AudioDestination* dest);
 
+  public slots:
+    /// Hotplug device add
+    void addDevice(SoundDevice* device);
+    /// Hotplug device remove
+    void removeDevice(SoundDevice* device);
+
   private slots:
     void completeDevicesClosing();
 
@@ -136,7 +146,9 @@ class SoundManager : public QObject {
     // isn't open is safe.
     void closeDevices(bool sleepAfterClosing, bool async = false);
 
+    /// Moved to PortAudioEnumerator
     void setJACKName() const;
+    /// Moved to PortAudioEnumerator
     bool jackApiUsed() const {
         return m_config.getAPI() == MIXXX_PORTAUDIO_JACK_STRING;
     }
@@ -162,4 +174,5 @@ class SoundManager : public QObject {
     int m_underflowUpdateCount;
     PollingControlProxy m_audioLatencyOverloadCount;
     PollingControlProxy m_audioLatencyOverload;
+    std::vector<SoundDeviceEnumerator> m_enumerators;
 };
